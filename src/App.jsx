@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import CameraView from './components/CameraView';
 import CodeViewer from './components/CodeViewer';
+import Preloader from './components/Preloader';
 import { analyzeWireframe } from './services/aiMock';
 import './index.css';
 
 function App() {
   const [appState, setAppState] = useState('idle'); // 'idle', 'scanning', 'processing', 'completed'
   const [generatedCode, setGeneratedCode] = useState('');
+  const [isPreloading, setIsPreloading] = useState(true);
 
   const handleStartScan = () => {
     setAppState('scanning');
@@ -30,10 +32,14 @@ function App() {
   };
 
   return (
-    <div style={styles.appContainer}>
-      <header className="animate-in" style={styles.header}>
+    <>
+      {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}
+      
+      {!isPreloading && (
+        <div style={styles.appContainer}>
+          <header className="animate-in" style={styles.header}>
         <div style={styles.logo}>
-          <span style={styles.brandAccent}>Wire</span>Snap
+          <span style={styles.brandAccent}>InsideMe</span> AI
         </div>
         <div style={styles.tagline}>
           <div style={styles.dot}></div>
@@ -45,13 +51,13 @@ function App() {
         {appState === 'idle' && (
           <div className="glass-panel animate-in delay-1" style={styles.hero}>
             <div style={styles.glowOrb}></div>
-            <h1 style={styles.heroTitle}>From sketch to <br/><span style={styles.codeAccent}>production code</span>.</h1>
+            <h1 style={styles.heroTitle}>Your phone-first <br/><span style={styles.codeAccent}>contextual memory</span>.</h1>
             <p style={styles.heroSubtitle}>
-              Point your iQOO camera at any UI wireframe. Our on-device Vision-Language Model instantly generates pixel-perfect React code for your laptop. Zero cloud dependency.
+              A cascading NPU/GPU architecture for local LLM inference. InsideMe AI remembers everything you see and hear with absolute zero cloud dependency.
             </p>
             <div style={styles.buttonGroup}>
               <button onClick={handleStartScan} className="primary" style={styles.ctaButton}>
-                Launch Camera Experience
+                Access Evidence Desk
               </button>
             </div>
           </div>
@@ -70,10 +76,10 @@ function App() {
             </div>
             <h2 style={styles.processingTitle}>Decoding Wireframe...</h2>
             <div style={styles.consoleText}>
-               <p className="code-font">> Initializing Snapdragon NPU...</p>
-               <p className="code-font" style={{animationDelay: '0.5s', opacity: 0, animation: 'fadeIn 0.1s forwards 0.5s'}}>> Running YOLOv8-Edge for bounding boxes...</p>
-               <p className="code-font" style={{animationDelay: '1.2s', opacity: 0, animation: 'fadeIn 0.1s forwards 1.2s'}}>> Extracting handwritten text via OCR...</p>
-               <p className="code-font" style={{animationDelay: '1.8s', opacity: 0, animation: 'fadeIn 0.1s forwards 1.8s'}}>> Assembling JSX syntax tree...</p>
+               <p className="code-font">&gt; Initializing Snapdragon NPU...</p>
+               <p className="code-font" style={{animationDelay: '0.5s', opacity: 0, animation: 'fadeIn 0.1s forwards 0.5s'}}>&gt; Running YOLOv8-Edge for bounding boxes...</p>
+               <p className="code-font" style={{animationDelay: '1.2s', opacity: 0, animation: 'fadeIn 0.1s forwards 1.2s'}}>&gt; Extracting handwritten text via OCR...</p>
+               <p className="code-font" style={{animationDelay: '1.8s', opacity: 0, animation: 'fadeIn 0.1s forwards 1.8s'}}>&gt; Assembling JSX syntax tree...</p>
             </div>
           </div>
         )}
@@ -84,7 +90,9 @@ function App() {
           </div>
         )}
       </main>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

@@ -27,8 +27,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
-    buildFeatures { compose = true }
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.1" }
+    buildFeatures { 
+        compose = true 
+        buildConfig = true
+    }
+    composeOptions { kotlinCompilerExtensionVersion = "1.5.10" }
 }
 
 dependencies {
@@ -56,4 +59,7 @@ dependencies {
     
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // Palette – real dominant colour extraction from captured images
+    implementation("androidx.palette:palette-ktx:1.0.0")
 }

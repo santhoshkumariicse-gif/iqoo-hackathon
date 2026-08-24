@@ -8,73 +8,75 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.iqoo.insideme.ui.CameraViewModel
+import com.iqoo.insideme.ui.components.CameraPreview
 
 @Composable
 fun MemoryCameraScreen(
-    onCaptureClick: () -> Unit,
-    onVoiceQueryClick: () -> Unit,
-    activeSubjectContext: String? = null,
-    previousMemoryCount: Int = 0,
-    lastObservationDate: String? = null,
-    onCompareClick: () -> Unit = {}
+    viewModel: CameraViewModel,
+    onBack: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-        
-        // Simulated Camera Viewfinder
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("[ CAMERA VIEWFINDER ]", color = Color.DarkGray)
-        }
-        
-        // AR-style Context Overlay (Appears when camera recognizes a subject)
-        if (activeSubjectContext != null) {
-            Card(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 48.dp, start = 16.dp, end = 16.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.7f))
+    val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    if (uiState.showConfirm) {
+        SmartCaptureConfirmScreen(
+            subjectName = "Motor Controller L293D", // Mocked detection
+            previousMemoryCount = 2,
+            lastObservation = "Aug 20, 2026",
+            onSave = { viewModel.saveMemory() },
+            onRetake = { viewModel.retake() }
+        )
+    } else {
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+            
+            CameraPreview(
+                imageCapture = viewModel.imageCapture,
+                modifier = Modifier.fillMaxSize()
+            )
+            
+            // UI Overlay
+            IconButton(
+                onClick = onBack,
+                modifier = Modifier.align(Alignment.TopStart).padding(16.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Possible match: $activeSubjectContext", style = MaterialTheme.typography.titleMedium, color = Color.White)
-                    Text("$previousMemoryCount previous memories", style = MaterialTheme.typography.bodySmall, color = Color.LightGray)
-                    if (lastObservationDate != null) {
-                        Text("Last seen: $lastObservationDate", style = MaterialTheme.typography.bodySmall, color = Color.LightGray)
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = onCompareClick, modifier = Modifier.fillMaxWidth()) {
-                        Text("Compare")
+                Text("✕", color = Color.White, style = MaterialTheme.typography.headlineMedium)
+            }
+
+            // Bottom Controls
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Voice Input
+                OutlinedButton(
+                    onClick = { /* Voice query logic */ },
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
+                ) {
+                    Text("🎙 Ask about this")
+                }
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // Giant Capture Button
+                Button(
+                    onClick = { viewModel.captureImage(context) },
+                    modifier = Modifier.size(80.dp),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    enabled = !uiState.isCapturing
+                ) {
+                    if (uiState.isCapturing) {
+                        CircularProgressIndicator(color = Color.Black)
                     }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Capture Memory", color = Color.White, style = MaterialTheme.typography.labelMedium)
             }
-        }
-
-        // Bottom Controls
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Voice Input
-            OutlinedButton(
-                onClick = onVoiceQueryClick,
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
-            ) {
-                Text("🎙 Ask about this")
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Giant Capture Button
-            Button(
-                onClick = onCaptureClick,
-                modifier = Modifier.size(80.dp),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
-            ) {}
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Capture Memory", color = Color.White, style = MaterialTheme.typography.labelMedium)
         }
     }
 }

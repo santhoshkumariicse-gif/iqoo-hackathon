@@ -105,7 +105,8 @@ const styles = {
     overflow: 'hidden',
     backgroundColor: '#111',
     aspectRatio: '3/4',
-    boxShadow: 'inset 0 0 50px rgba(0,0,0,1)'
+    boxShadow: 'inset 0 0 50px rgba(0,0,0,1)',
+    animation: 'pulse-glow 4s infinite'
   },
   video: {
     width: '100%',
@@ -182,8 +183,14 @@ if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.innerHTML = `
     @keyframes scanY {
-      0% { top: 20%; }
-      100% { top: 80%; }
+      0% { top: 20%; opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { top: 80%; opacity: 0.3; }
+    }
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 10px var(--primary-glow); }
+      50% { box-shadow: 0 0 30px var(--primary-glow); }
+      100% { box-shadow: 0 0 10px var(--primary-glow); }
     }
   `;
   document.head.appendChild(style);

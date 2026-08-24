@@ -1,11 +1,6 @@
 package com.iqoo.insideme.ai.core
 
-data class Observation(
-    val entityId: String,
-    val timestamp: Long,
-    val attributes: Map<String, String>,
-    val confidence: Float
-)
+import com.iqoo.insideme.domain.graph.Observation
 
 data class DetectedChange(
     val attribute: String,
@@ -14,31 +9,43 @@ data class DetectedChange(
     val confidence: Float
 )
 
+data class ProposedAction(
+    val type: ActionType,
+    val targetEntityId: String,
+    val description: String,
+    val requiresApproval: Boolean = true
+)
+
+enum class ActionType {
+    SCHEDULE_MAINTENANCE, CREATE_REPORT, FLAG_FOR_REVIEW, ESCALATE, ARCHIVE
+}
+
 /**
- * 13.2 Vision Component
- * Extracts structured facts. Does NOT write natural language.
+ * Vision Component – Extracts structured facts from raw image bytes.
+ * Does NOT write natural language. Does NOT claim NPU/GPU acceleration.
  */
 interface VisionAI {
     suspend fun analyzeImage(imageBytes: ByteArray): Observation
 }
 
 /**
- * 13.4 Embedding Component
- * Converts text into a vector for hybrid semantic search.
+ * Embedding Component – Converts text to a float vector.
  */
 interface EmbeddingEngine {
     suspend fun embed(text: String): FloatArray
 }
 
 /**
- * 13.7 Deterministic Temporal Engine
- * Pure Kotlin code to compute the delta between observations.
- * The LLM must NEVER be asked to hallucinate what changed from raw text.
+ * Deterministic Temporal Engine.
+ * Pure Kotlin: computes attribute deltas between observations.
+ * The LLM is NEVER asked to hallucinate what changed from raw text.
  */
 class TemporalEngine {
-    fun compareObservations(previous: Observation, current: Observation): List<DetectedChange> {
+    fun compareObservations(
+        previous: Observation,
+        current: Observation
+    ): List<DetectedChange> {
         val changes = mutableListOf<DetectedChange>()
-        
         current.attributes.forEach { (key, currVal) ->
             val prevVal = previous.attributes[key]
             if (prevVal != currVal) {
@@ -47,7 +54,7 @@ class TemporalEngine {
                         attribute = key,
                         previousValue = prevVal,
                         currentValue = currVal,
-                        confidence = 0.95f // Mocked confidence
+                        confidence = 1.0f
                     )
                 )
             }

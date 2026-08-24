@@ -16,7 +16,8 @@ data class MainUiState(
 )
 
 class MainViewModel(
-    private val orchestrator: InsideMeOrchestrator
+    private val orchestrator: InsideMeOrchestrator,
+    private val syncRepo: com.iqoo.insideme.repositories.OfficeKitSyncRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainUiState())
@@ -37,6 +38,13 @@ class MainViewModel(
             
             val result = orchestrator.answerQuery(query, context)
             _uiState.value = _uiState.value.copy(isLoading = false, response = result)
+        }
+    }
+
+    fun onSync() {
+        val currentResponse = _uiState.value.response ?: return
+        viewModelScope.launch {
+            syncRepo.syncToEvidenceDesk("ent_a17", currentResponse)
         }
     }
 }

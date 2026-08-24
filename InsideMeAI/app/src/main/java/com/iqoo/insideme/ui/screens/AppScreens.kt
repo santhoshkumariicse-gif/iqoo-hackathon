@@ -11,7 +11,8 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onNavigateToCapture: () -> Unit,
     onNavigateToSearch: () -> Unit,
-    onNavigateToLab: () -> Unit
+    onNavigateToLab: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -36,6 +37,12 @@ fun HomeScreen(
         
         Button(onClick = onNavigateToLab, modifier = Modifier.fillMaxWidth()) {
             Text("⚙️ Hardware Lab")
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        OutlinedButton(onClick = onNavigateToSettings, modifier = Modifier.fillMaxWidth()) {
+            Text("🛠 Configuration")
         }
         
         Spacer(modifier = Modifier.height(32.dp))

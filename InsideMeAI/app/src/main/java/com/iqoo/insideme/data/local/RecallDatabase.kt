@@ -4,15 +4,9 @@ import androidx.room.*
 
 data class MemoryWithRelations(
     @Embedded val memory: MemoryEntity,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "memoryId"
-    )
+    @Relation(parentColumn = "id", entityColumn = "memoryId")
     val tags: List<MemoryTagEntity>,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "memoryId"
-    )
+    @Relation(parentColumn = "id", entityColumn = "memoryId")
     val embedding: MemoryEmbeddingEntity?
 )
 
@@ -38,13 +32,25 @@ interface MemoryDao {
     @Transaction
     @Query("SELECT * FROM memories WHERE id = :id")
     suspend fun getMemoryById(id: String): MemoryWithRelations?
+
+    @Query("DELETE FROM memories WHERE id = :id")
+    suspend fun deleteMemoryById(id: String)
 }
 
 @Database(
-    entities = [MemoryEntity::class, MemoryTagEntity::class, MemoryEmbeddingEntity::class, SubjectEntity::class],
-    version = 1,
+    entities = [
+        MemoryEntity::class,
+        MemoryTagEntity::class,
+        MemoryEmbeddingEntity::class,
+        SubjectEntity::class,
+        ImageEntity::class,
+        ImageMetadata::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class RecallDatabase : RoomDatabase() {
     abstract fun memoryDao(): MemoryDao
+    abstract fun imageDao(): ImageDao
+    abstract fun imageMetadataDao(): ImageMetadataDao
 }
