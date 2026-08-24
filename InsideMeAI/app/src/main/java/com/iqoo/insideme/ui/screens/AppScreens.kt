@@ -10,7 +10,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomeScreen(
     onNavigateToCapture: () -> Unit,
-    onNavigateToSearch: () -> Unit
+    onNavigateToSearch: () -> Unit,
+    onNavigateToLab: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -29,6 +30,12 @@ fun HomeScreen(
         
         Button(onClick = onNavigateToSearch, modifier = Modifier.fillMaxWidth()) {
             Text("🔎 Search memories")
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Button(onClick = onNavigateToLab, modifier = Modifier.fillMaxWidth()) {
+            Text("⚙️ Hardware Lab")
         }
         
         Spacer(modifier = Modifier.height(32.dp))

@@ -8,7 +8,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.iqoo.insideme.ai.GroundedResponse
+import com.iqoo.insideme.ai.Claim
 
 @Composable
 fun AiSearchScreen(
@@ -85,5 +87,26 @@ fun AiSearchScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF0D0F12)
+@Composable
+fun AiSearchScreenPreview() {
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        AiSearchScreen(
+            onSearch = {},
+            onMicClick = {},
+            isLoading = false,
+            response = GroundedResponse(
+                answer = "The motor controller appears to be an L293D based on the retrieved photos.",
+                confidence = "High",
+                evidenceIds = listOf("mem_001", "mem_002"),
+                claims = listOf(
+                    Claim("L293D text visible", "OBSERVED", "mem_001"),
+                    Claim("Likely safe to operate", "INFERRED", null)
+                )
+            )
+        )
     }
 }

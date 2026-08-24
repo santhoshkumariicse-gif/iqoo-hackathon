@@ -1,10 +1,6 @@
 package com.iqoo.insideme.lab
 
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,39 +19,16 @@ val DeepCanvas = Color(0xFF0D0F12)
 val SurfaceCard = Color(0xFF1A1D24)
 val PrimaryAction = Color(0xFFFF5500)
 val AIGlow = Color(0xFF00E5FF)
-val GlassBorder = Color(0x1A2D333F) // 10% opacity
-
-class MainActivity : ComponentActivity() {
-    private val viewModel: LabViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            val customColorScheme = darkColorScheme(
-                background = DeepCanvas,
-                surface = SurfaceCard,
-                primary = PrimaryAction,
-                secondary = AIGlow
-            )
-            MaterialTheme(colorScheme = customColorScheme) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    BenchmarkScreen(viewModel)
-                }
-            }
-        }
-    }
-}
+val GlassBorder = Color(0x1A2D333F)
 
 @Composable
-fun BenchmarkScreen(viewModel: LabViewModel) {
+fun HardwareLabScreen(viewModel: LabViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(DeepCanvas)
             .padding(16.dp)
     ) {
         Row(

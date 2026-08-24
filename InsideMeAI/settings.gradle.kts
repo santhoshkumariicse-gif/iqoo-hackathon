@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "InsideMeAILab"
+rootProject.name = "InsideMeAI"
 include(":app")

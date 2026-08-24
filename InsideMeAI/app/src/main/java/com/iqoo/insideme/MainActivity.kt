@@ -61,13 +61,30 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    var currentScreen by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("home") }
                     val uiState by viewModel.uiState.collectAsState()
-                    AiSearchScreen(
-                        onSearch = { viewModel.onSearch(it) },
-                        onMicClick = { /* STT integration */ },
-                        isLoading = uiState.isLoading,
-                        response = uiState.response
-                    )
+                    val labViewModel = androidx.compose.runtime.remember { com.iqoo.insideme.lab.ui.LabViewModel() }
+
+                    when (currentScreen) {
+                        "home" -> {
+                            com.iqoo.insideme.ui.screens.HomeScreen(
+                                onNavigateToCapture = { },
+                                onNavigateToSearch = { currentScreen = "search" },
+                                onNavigateToLab = { currentScreen = "lab" }
+                            )
+                        }
+                        "search" -> {
+                            AiSearchScreen(
+                                onSearch = { viewModel.onSearch(it) },
+                                onMicClick = { /* STT integration */ },
+                                isLoading = uiState.isLoading,
+                                response = uiState.response
+                            )
+                        }
+                        "lab" -> {
+                            com.iqoo.insideme.lab.HardwareLabScreen(viewModel = labViewModel)
+                        }
+                    }
                 }
             }
         }
