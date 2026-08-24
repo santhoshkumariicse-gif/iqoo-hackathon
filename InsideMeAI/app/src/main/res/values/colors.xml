@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="deep_canvas">#0D0F12</color>
+    <color name="surface_card">#1A1D24</color>
+    <color name="primary_action">#FFFF5500</color>
+    <color name="ai_glow">#00E5FF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

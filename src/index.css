@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap');
+
+:root {
+  font-family: 'Outfit', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.9);
+  
+  /* Color Palette */
+  --bg-base: #050505;
+  --bg-mesh-1: #1a0b2e;
+  --bg-mesh-2: #0b1120;
+  --primary: #f7a400; /* iQOO Orange */
+  --primary-glow: rgba(247, 164, 0, 0.5);
+  --secondary: #00e5ff;
+  --secondary-glow: rgba(0, 229, 255, 0.4);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(15, 15, 20, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-border-highlight: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --inner-glow: inset 0 1px 0 0 rgba(255,255,255,0.1);
+  
+  --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-base);
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated Mesh Gradient Background */
+body::before {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 50% 50%, var(--bg-mesh-1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, var(--bg-mesh-2) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(247,164,0,0.03) 0%, transparent 40%);
+  z-index: -2;
+  animation: meshDrift 30s infinite alternate linear;
+}
+
+/* Noise overlay for premium texture */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.04;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+#root {
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography */
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+h1 {
+  font-size: 3.5em;
+  background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+p {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+  font-size: 1.1em;
+}
+
+/* Premium Buttons */
+button {
+  border-radius: 12px;
+  border: 1px solid var(--glass-border-highlight);
+  padding: 14px 28px;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background: rgba(255,255,255,0.03);
+  color: #fff;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: var(--inner-glow), 0 4px 6px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--inner-glow), 0 8px 15px rgba(0,0,0,0.2);
+}
+
+button.primary {
+  background: var(--primary);
+  color: #000;
+  border: none;
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+
+button.primary:hover {
+  background: #ffb833;
+  box-shadow: 0 0 30px var(--primary-glow);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Glassmorphism Panel 2.0 */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--inner-glow);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle corner glows for panels */
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.05) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes meshDrift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-3%, 2%) rotate(2deg); }
+  100% { transform: translate(2%, -3%) rotate(-1deg); }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(30px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-in {
+  animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+/* Code Font */
+.code-font {
+  font-family: 'JetBrains Mono', monospace;
+}

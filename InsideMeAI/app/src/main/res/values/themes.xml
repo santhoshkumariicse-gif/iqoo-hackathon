@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.InsideMeAI" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/deep_canvas</item>
+        <item name="android:windowBackground">@color/deep_canvas</item>
+    </style>
+</resources>
